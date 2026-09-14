@@ -1,0 +1,57 @@
+{
+  "name": "n8n-nodes-tiro",
+  "version": "1.0.0",
+  "description": "n8n community node for Tiro \u2014 turn documents into table data: trigger on finished extracts, upload documents, fetch results.",
+  "keywords": [
+    "n8n-community-node-package",
+    "tiro",
+    "document",
+    "pdf",
+    "ocr",
+    "data extraction"
+  ],
+  "license": "MIT",
+  "homepage": "https://tirodocs.com/en/integrations/n8n",
+  "author": {
+    "name": "Tiro",
+    "email": "contact@tirodocs.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerloff/n8n-nodes-tiro.git"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "scripts": {
+    "build": "tsc && node scripts/copy-assets.mjs",
+    "test": "npm run build && node --test \"dist/test/**/*.test.js\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist/credentials",
+    "dist/nodes"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/TiroApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Tiro/Tiro.node.js",
+      "dist/nodes/Tiro/TiroTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "24.3.0",
+    "n8n-workflow": "^1.120.29",
+    "typescript": "5.9.2"
+  },
+  "overrides": {
+    "form-data": "4.0.6"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
