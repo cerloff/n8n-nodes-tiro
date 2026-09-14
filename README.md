@@ -61,8 +61,15 @@ installs anything at runtime, so the multipart upload body is built by hand in
 ## Publishing (runbook)
 
 1. `npm test` green, version bumped in `package.json`.
-2. Mirror this folder into the public repository `n8n-nodes-tiro` (the GitHub link is also the
-   backlink for the integration page, and provenance needs a public repository).
+2. Sync this folder into the public mirror <https://github.com/cerloff/n8n-nodes-tiro> (the
+   GitHub link is also the backlink for the integration page, and provenance needs a public
+   repository). From the monorepo:
+
+   ```bash
+   git archive HEAD -- integrations/n8n | tar -x -C ../n8n-nodes-tiro --strip-components=2
+   ```
+
+   then commit and push there.
 3. On npmjs.com, add `.github/workflows/publish.yml` of that repository as a **trusted
    publisher** for the package (or store an automation token as the secret `NPM_TOKEN`).
 4. Tag the release (`git tag v1.0.0 && git push --tags`). The workflow installs, tests and runs
