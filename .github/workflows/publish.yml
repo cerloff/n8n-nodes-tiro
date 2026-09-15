@@ -25,7 +25,9 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      - run: npm ci
+      # isolated-vm (from n8n-workflow's dev tree) needs a native build we do
+      # not need — only its type declarations matter here.
+      - run: npm ci --ignore-scripts
       - run: npm test
       - run: npm publish --provenance --access public
         env:
