@@ -6,6 +6,7 @@ import type {
 	IWebhookFunctions,
 	IWebhookResponseData,
 } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 import {
 	MODE_EXTRACT,
 	MODE_FAILURE,
@@ -32,16 +33,14 @@ export class TiroTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Tiro Trigger',
 		name: 'tiroTrigger',
-		icon: 'file:tiro.svg',
+		icon: { light: 'file:tiro.svg', dark: 'file:tiro.dark.svg' },
 		group: ['trigger'],
 		version: 1,
 		subtitle: '={{$parameter["event"]}}',
 		description: 'Starts the workflow when Tiro finishes a document',
 		defaults: { name: 'Tiro Trigger' },
 		inputs: [],
-		// Plain 'main' instead of the NodeConnectionTypes constant: the literal
-		// works on every n8n version this node may be installed on.
-		outputs: ['main'],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [{ name: 'tiroApi', required: true }],
 		webhooks: [
 			{

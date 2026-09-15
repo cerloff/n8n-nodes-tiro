@@ -1,5 +1,6 @@
 import type {
 	IAuthenticateGeneric,
+	Icon,
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
@@ -14,6 +15,8 @@ export class TiroApi implements ICredentialType {
 	name = 'tiroApi';
 
 	displayName = 'Tiro API';
+
+	icon: Icon = { light: 'file:tiro.svg', dark: 'file:tiro.dark.svg' };
 
 	documentationUrl = 'https://tirodocs.com/en/integrations/n8n';
 

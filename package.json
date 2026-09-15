@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-tiro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "n8n community node for Tiro \u2014 turn documents into table data: trigger on finished extracts, upload documents, fetch results.",
   "keywords": [
     "n8n-community-node-package",
@@ -47,11 +47,11 @@
     "n8n-workflow": "^1.120.29",
     "typescript": "5.9.2"
   },
-  "overrides": {
-    "form-data": "4.0.6"
-  },
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
   }
 }

@@ -31,8 +31,9 @@ workflow's webhook URL as soon as a document is finished. No polling, no empty e
   anything that did not come from Tiro or is older than five minutes.
 - If the inbox reviews its results, only released results reach the workflow.
 - Your n8n instance must be reachable from the internet over **https** with a public hostname —
-  Tiro refuses private, loopback and link-local addresses. For a quick test use `n8n start
-  --tunnel` or n8n Cloud.
+  Tiro refuses private, loopback and link-local addresses. For a quick test put a tunnel in
+  front of it (`cloudflared tunnel --url http://localhost:5678`) and start n8n with
+  `WEBHOOK_URL` set to the public address; n8n 2 no longer ships its own `--tunnel`.
 - Deleting or deactivating the workflow deletes the destination in Tiro.
 
 ## Upload and result
@@ -49,7 +50,14 @@ instead of an error, so an IF node can loop back into the Wait step.
 npm install
 npm test          # builds and runs the node test runner
 npm run build     # dist/ as n8n loads it
+npx -y @n8n/node-cli lint   # n8n's verification rules (what the Creator Portal checks)
 ```
+
+The verification lint is not a dependency of this package (its tree is huge); run it through
+`npx` before a release. It enforces what n8n checks on submission: no runtime dependencies,
+`NodeConnectionTypes` instead of string literals, `NodeApiError`/`NodeOperationError` instead of
+raw throws, themed icons on nodes *and* credentials, `peerDependencies` on `n8n-workflow`, and no
+`overrides` field.
 
 Local n8n: `npm run build && npm link`, then `npm link n8n-nodes-tiro` in `~/.n8n/custom/`
 (create the folder if it does not exist) and restart n8n.

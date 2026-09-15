@@ -5,11 +5,14 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(fileURLToPath(new URL("../package.json", import.meta.url)));
-const source = join(root, "nodes", "Tiro");
-const target = join(root, "dist", "nodes", "Tiro");
 
-for (const name of await readdir(source)) {
-  if (name.endsWith(".svg") || name.endsWith(".json")) {
-    await cp(join(source, name), join(target, name));
+// Node icons and codex files, plus the credential icon n8n's verification asks for.
+for (const parts of [["nodes", "Tiro"], ["credentials"]]) {
+  const source = join(root, ...parts);
+  const target = join(root, "dist", ...parts);
+  for (const name of await readdir(source)) {
+    if (name.endsWith(".svg") || name.endsWith(".json")) {
+      await cp(join(source, name), join(target, name));
+    }
   }
 }

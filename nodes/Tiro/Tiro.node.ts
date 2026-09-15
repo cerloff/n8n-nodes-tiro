@@ -1,9 +1,11 @@
+import { NodeApiError, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 import type {
 	IDataObject,
 	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	JsonObject,
 } from 'n8n-workflow';
 import {
 	baseUrl,
@@ -25,14 +27,14 @@ export class Tiro implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Tiro',
 		name: 'tiro',
-		icon: 'file:tiro.svg',
+		icon: { light: 'file:tiro.svg', dark: 'file:tiro.dark.svg' },
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Upload documents to Tiro and read extracted data',
 		defaults: { name: 'Tiro' },
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		usableAsTool: true,
 		credentials: [{ name: 'tiroApi', required: true }],
 		properties: [
@@ -142,11 +144,14 @@ export class Tiro implements INodeType {
 						: await getExtract.call(this, api, inboxId, i, inboxes);
 				out.push({ json, pairedItem: { item: i } });
 			} catch (error) {
-				if (!this.continueOnFail()) throw error;
-				out.push({
-					json: { error: (error as Error).message },
-					pairedItem: { item: i },
-				});
+				// Our own errors already carry the API's wording; anything else
+				// (a broken binary field, a socket error) gets the node context.
+				const failure =
+					error instanceof NodeApiError || error instanceof NodeOperationError
+						? error
+						: new NodeApiError(this.getNode(), error as JsonObject);
+				if (!this.continueOnFail()) throw failure;
+				out.push({ json: { error: failure.message }, pairedItem: { item: i } });
 			}
 		}
 		return [out];

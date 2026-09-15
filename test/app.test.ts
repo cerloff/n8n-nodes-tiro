@@ -21,6 +21,7 @@ test('n8n finds everything package.json promises it', () => {
 	}
 	// The icons are copied next to the compiled nodes, not compiled.
 	assert.ok(existsSync(join(root, 'dist/nodes/Tiro/tiro.svg')));
+	assert.ok(existsSync(join(root, 'dist/nodes/Tiro/tiro.dark.svg')));
 	assert.ok(existsSync(join(root, 'dist/nodes/Tiro/Tiro.node.json')));
 });
 
@@ -36,9 +37,9 @@ test('the package has no runtime dependencies', () => {
 test('both nodes are described the way n8n expects', () => {
 	for (const node of nodes) {
 		const description = node.description;
-		assert.equal(description.icon, 'file:tiro.svg');
+		assert.deepEqual(description.icon, { light: 'file:tiro.svg', dark: 'file:tiro.dark.svg' });
 		assert.deepEqual(description.credentials, [{ name: 'tiroApi', required: true }]);
-		assert.deepEqual(description.outputs, ['main']);
+		assert.deepEqual(description.outputs, ['main']); // NodeConnectionTypes.Main
 		for (const property of description.properties) {
 			// Every parameter needs a default, or n8n cannot render the node.
 			assert.notEqual(property.default, undefined, `${property.name} has no default`);
